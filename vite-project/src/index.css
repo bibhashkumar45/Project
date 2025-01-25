@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* The @apply directive allows you to reuse Tailwind's utility classes in custom CSS */
+.active hr{
+  @apply block;
+}
