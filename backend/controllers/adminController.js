@@ -108,7 +108,7 @@ const loginAdmin=async(req,res)=>
 
     }else
     {
-      res.status(500).json({success:false, message:"Invalid Credentials"})
+      res.json({success:false, message:"Invalid Credentials"});
     }
   }
   catch(error)
@@ -117,10 +117,6 @@ const loginAdmin=async(req,res)=>
     res.json({success:false, message:error.message});
   }
 }
-
-
-
-
 
 
 export { addDoctor,loginAdmin };
