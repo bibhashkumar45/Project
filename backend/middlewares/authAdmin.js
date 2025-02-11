@@ -6,7 +6,7 @@ const authAdmin = (req, res, next) => {
     if (!atoken) {
       return res.json({
         success: false,
-        message: "Not Authorized Login please",
+        message: "Not Authorized Login please Mai authAdmin se hu",
       });
     }
 

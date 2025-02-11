@@ -15,11 +15,23 @@ const addDoctor = async (req, res) => {
       degree,
       experience,
       about,
-      available,
       fees,
-      date,
       address,
     } = req.body;
+
+    console.log("Doctor Details:");
+    console.log("Name:", name);
+    console.log("Email:", email);
+    console.log("Password:", password);
+    console.log("Speciality:", speciality);
+    console.log("Degree:", degree);
+    console.log("Experience:", experience);
+    console.log("About:", about);
+    console.log("Fees:", fees);
+    console.log("Address:", address);
+
+
+
     const imageFile = req.file;
     console.log({name})
     console.log(imageFile);
@@ -33,14 +45,12 @@ const addDoctor = async (req, res) => {
       !degree ||
       !experience ||
       !about ||
-      !available ||
       !fees ||
-      !address||
-      !date
+      !address
     ) {
       return res
         .status(400)
-        .json({ success: false, message: "Missing Deatils" });
+        .json({ success: false, message: "Missing Deatils Mai admin controller se hu bhai" });
     }
 
     // Validate email
@@ -64,16 +74,16 @@ const addDoctor = async (req, res) => {
 
 
     // Upload Image TO Cloudinary
-    // const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
-    //   resource_type: "image",
-    // });
-    // const imageUrl = imageUpload.secure_url;
+    const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
+      resource_type: "image",
+    });
+    const imageUrl = imageUpload.secure_url;
 
     // Add Doctore to Database
     const doctoreData={
       name,
       email,
-      // image:
+      image:imageUrl,
       password:hashedPassword,
       speciality,
       degree,
@@ -81,7 +91,6 @@ const addDoctor = async (req, res) => {
       about,
       fees,
       address:JSON.parse(address),
-      available,
       date:Date.now()
     }
 
@@ -104,11 +113,11 @@ const loginAdmin=async(req,res)=>
     {
       // tokenn generation
       const token=jwt.sign(email+password,process.env.JWT_SCRETE)
+      console.log("Tu Login ho gya hai bhai");
       res.json({success:true,token});
-
     }else
     {
-      res.json({success:false, message:"Invalid Credentials"});
+      res.json({success:false, message:"Invalid Credentials nhi hai bhai"});
     }
   }
   catch(error)
