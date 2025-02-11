@@ -5,10 +5,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  isEmail: {
+  email: {
     type: String,
     required: true,
     unique:true
+  },
+  password:{
+    type:String,
+    required:true,
   },
   image: {
     type: String,
@@ -16,8 +20,8 @@ const userSchema = new mongoose.Schema({
   },
 
   address: {
-    type: String,
-    default:{line1:'', line2:''}
+    line1: { type: String},
+  line2: { type: String },
   },
   gender:
   {
@@ -34,5 +38,5 @@ const userSchema = new mongoose.Schema({
   }
 }); // imp
 
-const userModel = mongoose.models.doctor || mongoose.model("user", userSchema);
+const userModel = mongoose.model("user", userSchema);
 export default userModel;

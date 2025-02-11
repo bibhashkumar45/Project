@@ -30,10 +30,8 @@ const addDoctor = async (req, res) => {
     console.log("Fees:", fees);
     console.log("Address:", address);
 
-
-
     const imageFile = req.file;
-    console.log({name})
+    console.log({ name });
     console.log(imageFile);
 
     // Checking for all data and add doctor
@@ -50,7 +48,10 @@ const addDoctor = async (req, res) => {
     ) {
       return res
         .status(400)
-        .json({ success: false, message: "Missing Deatils Mai admin controller se hu bhai" });
+        .json({
+          success: false,
+          message: "Missing Deatils Mai admin controller se hu bhai",
+        });
     }
 
     // Validate email
@@ -71,8 +72,6 @@ const addDoctor = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-
-
     // Upload Image TO Cloudinary
     const imageUpload = await cloudinary.uploader.upload(imageFile.path, {
       resource_type: "image",
@@ -80,52 +79,63 @@ const addDoctor = async (req, res) => {
     const imageUrl = imageUpload.secure_url;
 
     // Add Doctore to Database
-    const doctoreData={
+    const doctoreData = {
       name,
       email,
-      image:imageUrl,
-      password:hashedPassword,
+      image: imageUrl,
+      password: hashedPassword,
       speciality,
       degree,
       experience,
       about,
       fees,
-      address:JSON.parse(address),
-      date:Date.now()
-    }
+      address: JSON.parse(address),
+      date: Date.now(),
+    };
 
     // Make Model
-    const newDoctor=new doctorModel(doctoreData);
+    const newDoctor = new doctorModel(doctoreData);
     await newDoctor.save();
-    res.status(200).json({success:true, message:"Doctor Added Successfully"});
+    res
+      .status(200)
+      .json({ success: true, message: "Doctor Added Successfully" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({success:false, message:"Internal Server Error"});
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 
 // API for the Admin Login
-const loginAdmin=async(req,res)=>
-{
-  try{
-    const {email,password}=req.body;
-    if(email===process.env.ADMIN_EMAIL && password===process.env.ADMIN_PASSWORD)
-    {
+const loginAdmin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (
+      email === process.env.ADMIN_EMAIL &&
+      password === process.env.ADMIN_PASSWORD
+    ) {
       // tokenn generation
-      const token=jwt.sign(email+password,process.env.JWT_SCRETE)
+      const token = jwt.sign(email + password, process.env.JWT_SCRETE);
       console.log("Tu Login ho gya hai bhai");
-      res.json({success:true,token});
-    }else
-    {
-      res.json({success:false, message:"Invalid Credentials nhi hai bhai"});
+      res.json({ success: true, token });
+    } else {
+      res.json({ success: false, message: "Invalid Credentials nhi hai bhai" });
     }
-  }
-  catch(error)
-  {
+  } catch (error) {
     console.log(error);
-    res.json({success:false, message:error.message});
+    res.json({ success: false, message: error.message });
   }
-}
+};
 
+// API to get all admnin panel
 
-export { addDoctor,loginAdmin };
+const allDoctors = async (req, res) => {
+  try {
+    const doctors=await doctorModel.find({}).select('-password');
+    res.json({success:true,doctors});
+
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+export { addDoctor, loginAdmin ,allDoctors};
