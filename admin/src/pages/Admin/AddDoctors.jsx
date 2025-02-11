@@ -14,21 +14,19 @@ const AddDoctors = () => {
   const [about, setAbout] = useState("");
   const [Speciality, setSpeciality] = useState("General physician");
   const [degree, setDegree] = useState("");
-  const [address1, setAddress1] = useState("");
+  const [address1, setAddress1] = useState(""); 
   const [address2, setAddress2] = useState("");
 
-  const {backendUrl,atoken }=useContext(AdminContext);
+  const { backendUrl, atoken } = useContext(AdminContext);
 
-  const onSumitHandler=async(e)=>
-  {
+  const onSumitHandler = async (e) => {
     e.preventDefault();
 
-    if(!docImg)
-    {
+    if (!docImg) {
       return toast.error("Image Not Selected");
     }
 
-    try{
+    try {
       const formData = new FormData();
       formData.append("image", docImg);
       formData.append("name", name);
@@ -39,32 +37,41 @@ const AddDoctors = () => {
       formData.append("about", about);
       formData.append("speciality", Speciality);
       formData.append("degree", degree);
-      formData.append("address", JSON.stringify({line1:address1, line2:address2}));
-   
-  
+      formData.append(
+        "address",
+        JSON.stringify({ line1: address1, line2: address2 })
+      );
+
       for (let [key, value] of formData.entries()) {
         console.log(`${key}: ${value}`);
       }
-      const {data}=await axios.post(backendUrl+"/api/admin/add-doctor",formData,{headers:{atoken}});
+      const { data } = await axios.post(
+        backendUrl + "/api/admin/add-doctor",
+        formData,
+        { headers: { atoken } }
+      );
 
-      if(data.success)
-      {
+      if (data.success) {
         toast.success(data.message);
-      }
-      else
-      {
+        setDocImg(false);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setExperience("");
+        SteFee("");
+        setAbout("");
+        setSpeciality("");
+        setDegree("");
+        setAddress2("");
+        setAddress1("");
+      } else {
         toast.error(data.message);
       }
-
+    } catch (error) {
+      toast.error(error.message);
+      console.log(error);
     }
-    catch(error)
-    {
-
-    }
-  }
-
-
-
+  };
 
   return (
     <form onSubmit={onSumitHandler} className="m-5  w-full">
@@ -204,7 +211,7 @@ const AddDoctors = () => {
                 type="text"
                 placeholder="Address 1"
               />
-              
+
               <input
                 onChange={(e) => setAddress2(e.target.value)}
                 value={address2}
