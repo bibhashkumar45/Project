@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { assets } from "../../assets/assets";
+import { AdminContext } from "../../context/AdminContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const AddDoctors = () => {
   const [docImg, setDocImg] = useState(false);
@@ -14,26 +17,43 @@ const AddDoctors = () => {
   const [address1, setAddress1] = useState("");
   const [address2, setAddress2] = useState("");
 
+  const {backendUrl,atoken }=useContext(AdminContext);
+
   const onSumitHandler=async(e)=>
   {
     e.preventDefault();
 
+    if(!docImg)
+    {
+      return toast.error("Image Not Selected");
+    }
+
     try{
       const formData = new FormData();
-      formData.append("docImg", docImg);
+      formData.append("image", docImg);
       formData.append("name", name);
       formData.append("email", email);
       formData.append("password", password);
       formData.append("experience", experience);
-      formData.append("fee", fee);
+      formData.append("fees", fee);
       formData.append("about", about);
-      formData.append("Speciality", Speciality);
+      formData.append("speciality", Speciality);
       formData.append("degree", degree);
       formData.append("address", JSON.stringify({line1:address1, line2:address2}));
    
   
       for (let [key, value] of formData.entries()) {
         console.log(`${key}: ${value}`);
+      }
+      const {data}=await axios.post(backendUrl+"/api/admin/add-doctor",formData,{headers:{atoken}});
+
+      if(data.success)
+      {
+        toast.success(data.message);
+      }
+      else
+      {
+        toast.error(data.message);
       }
 
     }
@@ -182,8 +202,7 @@ const AddDoctors = () => {
                 value={address1}
                 className="border rounded px-3 py-2"
                 type="text"
-                placeholder="
-                Address 1"
+                placeholder="Address 1"
               />
               
               <input

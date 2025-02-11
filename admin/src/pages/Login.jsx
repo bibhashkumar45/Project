@@ -21,8 +21,9 @@ const Login = () => {
         const {data}=await axios.post(backendUrl+'/api/admin/login',{email,password});
         if(data.success)
         {
-          localStorage.setItem('aToken',data.token);   //Token save on local Storage 
+          localStorage.setItem('atoken',data.token);   //Token save on local Storage 
           setATOKEN(data.token);
+          toast.success('Login successful! Welcome, Admin.');
         }
         else{
           toast.error(data.message);
@@ -83,7 +84,7 @@ const Login = () => {
           </p>
         ) : (
           <p>
-            Admin Login{" "}
+            Admin Login?{" "}
             <span
               className="text-primary underline cursor-pointer"
               onClick={() => setState("Admin")}
