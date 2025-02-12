@@ -18,10 +18,11 @@ const AppContextProvider = (props) => {
       const { data } = await axios.get("http://localhost:4000/api/doctor/list");
       if (data.success) {
         setDoctors(data.doctors);
-        console.log("AAP yha pahuch gaye hai");
+        // console.log(data.doctors);
+        // console.log("AAP yha pahuch gaye hai");
       } else {
         toast.error(data.message);
-        console.log("AAP yha pahuch gaye hai");
+        // console.log("AAP yha pahuch gaye hai");
       }
     } catch (error) {
       console.log(error);
@@ -48,6 +49,7 @@ const AppContextProvider = (props) => {
 
   const value = {
     doctors,
+    getDoctorData,
     currencySymbol,
     token,
     setToken,

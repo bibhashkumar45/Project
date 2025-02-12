@@ -7,7 +7,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   // For Profile display  in create button
   const [showMenu, setShowMenu] = useState(false);
-  const { token, setToken } = useContext(AppContext);
+  const { token, setToken,userData} = useContext(AppContext);
   const logout=()=>
   {
     setToken(false)
@@ -43,9 +43,9 @@ const Navbar = () => {
         </NavLink>
       </ul>
       <div className="flex items-center">
-        {token ? (
+        {token? (
           <div className="flex items-center gap-2 cursor-pointer group relative">
-            <img className="w-8 rounded-full" src={assets.profile_pic} alt="" />
+            <img className="w-8 rounded-full" src={userData.image} alt="" />
             <img className="w-2.5" src={assets.dropdown_icon} alt="" />
 
             <div className="absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20 hidden group-hover:block">
