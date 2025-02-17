@@ -1,31 +1,32 @@
 import React, { useContext, useEffect } from "react";
-import { AdminContext } from "../../context/AdminContext";
+import { DoctorContext } from "../../context/DoctorContext";
 import { assets } from "../../assets/assets";
 import { AppContext } from "../../context/AppContext";
 
-const Dashboard = () => {
-  const { atoken, dashData, getDashData, cancleAppointment } =
-    useContext(AdminContext);
+const DoctorDashboard = () => {
+  const { dToken, dashData, setDashData, getDashData ,  completeAppointment, CancleAppointment,} =
+    useContext(DoctorContext);
 
-  const { slotDataFormat } = useContext(AppContext);
-
+  const { currency, calculateAge, slotDataFormat } = useContext(AppContext);
   useEffect(() => {
-    if (atoken) {
+    if (dToken) {
       getDashData();
     }
-  }, [atoken]);
+  }, [dToken]);
 
   return (
     dashData && (
       <div className="m-5">
         <div className="flex flex-wrap gap-3">
           <div className="flex items-center gap-2 bg-white p-4 min-w-52 rounded border-2 border-gray-100 cursor-pointer hover:scale-105 transition-all">
-            <img className="w-14" src={assets.doctor_icon} alt="" />
+            <img className="w-14" src={assets.earning_icon} alt="" />
             <div>
               <p className="text-xl font-semibold text-gray-600">
-                {dashData.doctors}
+                {" "}
+                {currency}
+                {dashData.earning}
               </p>
-              <p className="text-gray-400">Doctors</p>
+              <p className="text-gray-400">Earnings</p>
             </div>
           </div>
 
@@ -45,7 +46,7 @@ const Dashboard = () => {
               <p className="text-xl font-semibold text-gray-600">
                 {dashData.patients}
               </p>
-              <p className="text-gray-400">Doctors</p>
+              <p className="text-gray-400">Patients</p>
             </div>
           </div>
         </div>
@@ -60,30 +61,45 @@ const Dashboard = () => {
             {dashData.latestAppointments.map((item, index) => (
               <div
                 className="flex items-center px-6 py-3 gap-3 hover:bg-gray-100
-               "
+                 "
                 key={index}
               >
                 <img
                   className="rounded-full w-10"
-                  src={item.docData.image}
+                  src={item.userData.image}
                   alt=""
                 />
                 <div className="flex-1 text-sm">
                   <p className="text-gray-800 font-medium">
-                    {item.docData.name}
+                    {item.userData.name}
                   </p>
                   <p className="text-gray-600">
                     {slotDataFormat(item.slotData)}
                   </p>
                 </div>
 
-             {item.cancelled
-                     ? <p  className='text-red-400 text-xs font-medium'>Cancelled</p>
-                     : item.isCompleted 
-                     ? <p className='text-green-500 text-xs font-medium'>Completd</p> : <img 
-                     onClick={()=>cancleAppointment(item._id)}
-                     src={assets.cancel_icon} alt="" />
-                     }
+                {item.cancelled ? (
+                  <p className="text-red-600 text-sm font-medium">Cancelled</p>
+                ) : item.isCompleted ? (
+                  <p className="text-green-500 text-xs font-medium">
+                    Completed
+                  </p>
+                ) : (
+                  <div className="flex">
+                    <img
+                      onClick={() => CancleAppointment(item._id)}
+                      className="w-10 cursor-pointer"
+                      src={assets.cancel_icon}
+                      alt=""
+                    />
+                    <img
+                      onClick={() => completeAppointment(item._id)}
+                      className="w-10 cursor-pointer"
+                      src={assets.tick_icon}
+                      alt=""
+                    />
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -93,4 +109,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default DoctorDashboard;

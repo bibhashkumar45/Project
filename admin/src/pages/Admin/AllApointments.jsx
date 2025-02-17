@@ -55,7 +55,8 @@ const AllApointments = () => {
             <p>{currency}{item.amount}</p>
             {item.cancelled
             ? <p  className='text-red-400 text-xs font-medium'>Cancelled</p>
-            :  <img 
+            : item.isCompleted 
+            ? <p className='text-green-500 text-xs font-medium'>Completd</p> : <img 
             onClick={()=>cancleAppointment(item._id)}
             src={assets.cancel_icon} alt="" />
             }
